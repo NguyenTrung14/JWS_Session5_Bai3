@@ -4,6 +4,7 @@ package com.example.jws_session5_bai3.Service;
 import com.example.jws_session5_bai3.Entity.Product;
 import com.example.jws_session5_bai3.Repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +20,12 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Optional<Product> getProductById(Long id){
-        return productRepository.findById(id);
+    public ResponseEntity<?> getProductById(Long id){
+        Product product = productRepository.findById(id).orElse(null);
+        if(product == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(product);
     }
 
     public Product createProduct(Product product){
